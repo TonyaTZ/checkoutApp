@@ -1,0 +1,41 @@
+plugins {
+    id 'org.springframework.boot' version '2.5.0'
+    id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group 'com.tonya'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+task integrationTest(type: Test) {
+    useJUnitPlatform {
+        maxParallelForks = Runtime.runtime.availableProcessors()
+        include '**/*ITest.class'
+        testLogging.showStandardStreams = true
+    }
+}
+
+task unitTest(type: Test) {
+    useJUnitPlatform {
+        maxParallelForks = Runtime.runtime.availableProcessors()
+        include '**/*UTest.class'
+        testLogging.showStandardStreams = true
+    }
+}
+
