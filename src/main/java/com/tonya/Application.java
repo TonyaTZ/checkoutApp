@@ -1,4 +1,4 @@
-package com.tonya.checkout;
+package com.tonya;
 
 import com.tonya.checkout.config.AppConfig;
 import org.springframework.boot.SpringApplication;
