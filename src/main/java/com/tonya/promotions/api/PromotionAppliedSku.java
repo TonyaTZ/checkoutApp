@@ -1,8 +1,10 @@
 package com.tonya.promotions.api;
 
 import lombok.Builder;
+import lombok.Getter;
 
 @Builder
+@Getter
 public class PromotionAppliedSku {
 
     private String id;
