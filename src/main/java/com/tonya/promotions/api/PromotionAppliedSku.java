@@ -1,4 +1,4 @@
-package com.tonya.promotions.model;
+package com.tonya.promotions.api;
 
 import lombok.Builder;
 
