@@ -16,11 +16,18 @@ repositories {
 
 dependencies {
 
+    compileOnly 'org.projectlombok:lombok'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'io.springfox:springfox-swagger2:2.7.0'
+    implementation 'io.springfox:springfox-swagger-ui:2.7.0'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 task integrationTest(type: Test) {
@@ -35,6 +42,14 @@ task unitTest(type: Test) {
     useJUnitPlatform {
         maxParallelForks = Runtime.runtime.availableProcessors()
         include '**/*UTest.class'
+        testLogging.showStandardStreams = true
+    }
+}
+
+task apiTest(type: Test) {
+    useJUnitPlatform {
+        maxParallelForks = Runtime.runtime.availableProcessors()
+        include '**/*ApiTest.class'
         testLogging.showStandardStreams = true
     }
 }
