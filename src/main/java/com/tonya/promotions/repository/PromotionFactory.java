@@ -9,7 +9,7 @@ public class PromotionFactory {
             case MealDeal:
                 return new MealDealPromotion(price);
             case GetOneFree:
-                return new GetOneFreePromotion(price, requiredAmount);
+                return new GetOneFreePromotion(requiredAmount);
             case MultiPriced:
                 return new MultiPricedPromotion(price, requiredAmount);
             default:

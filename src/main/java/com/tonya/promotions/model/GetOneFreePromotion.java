@@ -6,8 +6,12 @@ import lombok.Getter;
 public class GetOneFreePromotion extends Promotion {
     private int requiredAmount;
 
-    public GetOneFreePromotion(int price, int requiredAmount) {
-        super(price);
+    public GetOneFreePromotion(int requiredAmount) {
+        super(0);
         this.requiredAmount = requiredAmount;
+    }
+
+    public int getPrice() {
+        throw new UnsupportedOperationException("Get one free promotion does not have price");
     }
 }
