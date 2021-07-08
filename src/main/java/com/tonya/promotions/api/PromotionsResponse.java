@@ -9,5 +9,5 @@ import java.util.List;
 @Builder
 public class PromotionsResponse {
 
-    private List<PromotionAppliedSku> items;
+    private final List<PromotionAppliedSku> items;
 }

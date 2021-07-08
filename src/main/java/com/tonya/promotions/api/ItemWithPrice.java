@@ -1,13 +1,13 @@
 package com.tonya.promotions.api;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
-@AllArgsConstructor
+@Builder
 @Getter
 public class ItemWithPrice {
 
-    private String id;
-    private int quantity;
-    private int price;
+    private final String id;
+    private final int quantity;
+    private final int price;
 }

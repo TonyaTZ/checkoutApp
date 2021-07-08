@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public class MultiPricedPromotion extends Promotion {
 
-    private int requiredAmount;
+    private final int requiredAmount;
 
     public MultiPricedPromotion(int price, int requiredAmount) {
         super(price);

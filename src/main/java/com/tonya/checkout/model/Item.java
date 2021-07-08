@@ -9,9 +9,9 @@ import javax.validation.constraints.Positive;
 public class Item {
 
     @NotBlank
-    private String id;
+    private final String id;
 
     @Positive
-    private int quantity;
+    private final int quantity;
 
 }

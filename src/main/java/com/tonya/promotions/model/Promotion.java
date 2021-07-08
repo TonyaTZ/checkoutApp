@@ -6,5 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public abstract class Promotion {
-    protected int price;
+
+    protected final int price;
+
 }
