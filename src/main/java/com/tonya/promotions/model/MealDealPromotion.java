@@ -6,7 +6,8 @@ import java.util.List;
 
 @Getter
 public class MealDealPromotion extends Promotion {
-    private List<String> requiredItems;
+
+    private final List<String> requiredItems;
 
     public MealDealPromotion(int price, List<String> requiredItems) {
         super(price);

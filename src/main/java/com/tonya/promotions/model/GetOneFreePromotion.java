@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class GetOneFreePromotion extends Promotion {
-    private int requiredAmount;
+
+    private final int requiredAmount;
 
     public GetOneFreePromotion(int requiredAmount) {
         super(0);

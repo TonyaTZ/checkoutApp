@@ -15,7 +15,8 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import static com.tonya.promotions.service.PromotionCalculator.processPromotion;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class PromotionCalculatorUTest {
 
@@ -32,9 +33,12 @@ class PromotionCalculatorUTest {
     @MethodSource("multiPricedTestCases")
     void multiPriced_test(int quantity, int usualPrice, int promotionPrice, int requiredForPromotion, int expectedPrice) {
         MultiPricedPromotion multiPricedPromotion = new MultiPricedPromotion(promotionPrice, requiredForPromotion);
-        SkuWithPromotion currentSku = new SkuWithPromotion(UUID.randomUUID().toString(),
-                quantity, usualPrice, multiPricedPromotion);
-
+        SkuWithPromotion currentSku = SkuWithPromotion.builder()
+                .id(UUID.randomUUID().toString())
+                .quantity(quantity)
+                .usualPrice(usualPrice)
+                .promotion(multiPricedPromotion)
+                .build();
 
         PromotionAppliedSku promotionAppliedSku = processPromotion(currentSku, List.of(currentSku));
 
@@ -57,8 +61,12 @@ class PromotionCalculatorUTest {
     @MethodSource("getOneFreeTestCases")
     void getOneFree_test(int quantity, int usualPrice, int requiredForPromotion, int expectedPrice) {
         GetOneFreePromotion getOneFreePromotion = new GetOneFreePromotion(requiredForPromotion);
-        SkuWithPromotion currentSku = new SkuWithPromotion(UUID.randomUUID().toString(),
-                quantity, usualPrice, getOneFreePromotion);
+        SkuWithPromotion currentSku = SkuWithPromotion.builder()
+                .id(UUID.randomUUID().toString())
+                .quantity(quantity)
+                .usualPrice(usualPrice)
+                .promotion(getOneFreePromotion)
+                .build();
 
         PromotionAppliedSku promotionAppliedSku = processPromotion(currentSku, List.of(currentSku));
 
@@ -83,10 +91,20 @@ class PromotionCalculatorUTest {
         String idY = UUID.randomUUID().toString();
 
         MealDealPromotion mealDealPromotionX = new MealDealPromotion(promotionPrice, List.of(idY));
-        SkuWithPromotion skuX = new SkuWithPromotion(idX, quantityX, usualPriceX, mealDealPromotionX);
+        SkuWithPromotion skuX = SkuWithPromotion.builder()
+                .id(idX)
+                .quantity(quantityX)
+                .usualPrice(usualPriceX)
+                .promotion(mealDealPromotionX)
+                .build();
 
         MealDealPromotion mealDealPromotionY = new MealDealPromotion(promotionPrice, List.of(idX));
-        SkuWithPromotion skuY = new SkuWithPromotion(idY, quantityY, usualPriceY, mealDealPromotionY);
+        SkuWithPromotion skuY = SkuWithPromotion.builder()
+                .id(idY)
+                .quantity(quantityY)
+                .usualPrice(usualPriceY)
+                .promotion(mealDealPromotionY)
+                .build();
 
         PromotionAppliedSku promotionAppliedSkuX = processPromotion(skuX, List.of(skuX, skuY));
 
@@ -107,10 +125,14 @@ class PromotionCalculatorUTest {
     void mealDeal_only_sku_test() {
         String idX = UUID.randomUUID().toString();
         String idY = UUID.randomUUID().toString();
-        SkuWithPromotion skuX;
 
         MealDealPromotion mealDealPromotionX = new MealDealPromotion(4, List.of(idY));
-        skuX = new SkuWithPromotion(idX, 1, 2, mealDealPromotionX);
+        SkuWithPromotion skuX = SkuWithPromotion.builder()
+                .id(idX)
+                .quantity(1)
+                .usualPrice(2)
+                .promotion(mealDealPromotionX)
+                .build();
 
         PromotionAppliedSku promotionAppliedSkuX = processPromotion(skuX, List.of(skuX));
 
@@ -121,7 +143,11 @@ class PromotionCalculatorUTest {
 
     @Test
     void noPromotion_test() {
-        SkuWithPromotion currentSku = new SkuWithPromotion(UUID.randomUUID().toString(), 2, 10, null);
+        SkuWithPromotion currentSku = SkuWithPromotion.builder()
+                .id(UUID.randomUUID().toString())
+                .quantity(2)
+                .usualPrice(10)
+                .build();
         PromotionAppliedSku promotionAppliedSku = processPromotion(currentSku, List.of(currentSku));
 
         assertNotNull(promotionAppliedSku);

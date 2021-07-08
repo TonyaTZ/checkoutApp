@@ -1,13 +1,14 @@
 package com.tonya.checkout.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 public class CheckoutResponse {
 
-    private int subTotal;
-    private int savings;
-    private int total;
+    private String id;
+    private final int subTotal;
+    private final int savings;
+    private final int total;
 }

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -33,18 +33,13 @@ class CheckoutServiceUTest {
 
         when(skuProvider.getSkus(anyList())).thenThrow(new MissingSkuException());
 
-        CheckoutRequest checkoutRequest = new CheckoutRequest();
         List<Item> items = getItems();
-        checkoutRequest.setItems(items);
-        assertThrows(MissingSkuException.class, () -> checkoutService.checkout(checkoutRequest));
+        assertThrows(MissingSkuException.class, () -> checkoutService.checkout(new CheckoutRequest(items)));
 
         verify(skuProvider).getSkus(items.stream().map(Item::getId).collect(Collectors.toList()));
     }
 
     private List<Item> getItems() {
-        Item e1 = new Item();
-        e1.setId(UUID.randomUUID().toString());
-        e1.setQuantity(1);
-        return List.of(e1);
+        return List.of(new Item(UUID.randomUUID().toString(), 1));
     }
 }

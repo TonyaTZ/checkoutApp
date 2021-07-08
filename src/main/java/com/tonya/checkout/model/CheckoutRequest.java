@@ -11,5 +11,5 @@ public class CheckoutRequest {
 
     @NotEmpty
     @Valid
-    private List<Item> items;
+    private final List<Item> items;
 }

@@ -24,21 +24,24 @@ public class PromotionService implements InternalPromotionsApi {
 
     @Override
     public PromotionsResponse calculatePromotions(List<ItemWithPrice> items) {
-        Map<String, Promotion> skusPromotionMap = promotionRepository.getPromotions(
+        Map<String, Promotion> promotionsMap = promotionRepository.getPromotions(
                 items.stream()
                         .map(ItemWithPrice::getId)
                         .collect(Collectors.toList())
         );
 
-        List<SkuWithPromotion> skusList = items.stream()
-                .map(item -> new SkuWithPromotion(item.getId(),
-                        item.getQuantity(), item.getPrice(),
-                        skusPromotionMap.get(item.getId())))
+        List<SkuWithPromotion> skusWithPromotion = items.stream()
+                .map(item -> SkuWithPromotion.builder()
+                        .id(item.getId())
+                        .quantity(item.getQuantity())
+                        .usualPrice(item.getPrice())
+                        .promotion(promotionsMap.get(item.getId()))
+                        .build())
                 .collect(Collectors.toList());
 
         List<PromotionAppliedSku> promotionAppliedSkus =
-                skusList.stream()
-                        .map(skuWithPromotion -> PromotionCalculator.processPromotion(skuWithPromotion, skusList))
+                skusWithPromotion.stream()
+                        .map(skuWithPromotion -> PromotionCalculator.processPromotion(skuWithPromotion, skusWithPromotion))
                         .collect(Collectors.toList());
 
         return PromotionsResponse.builder()

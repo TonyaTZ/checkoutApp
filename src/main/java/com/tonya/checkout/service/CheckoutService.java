@@ -27,49 +27,63 @@ public class CheckoutService {
     }
 
     /**
-     * Calculates the total charge of client during the checkout process.
+     * Calculates the total amount that user has to pay for the order.
      *
-     * @param checkoutRequest to be processed
+     * @param checkoutRequest containing the scanned items
      * @return response containing subtotal and total to be paid by client.
      */
     public CheckoutResponse checkout(CheckoutRequest checkoutRequest) {
         //todo request to contain only one item of each id.
 
         Map<String, Integer> priceMap = getPriceMap(checkoutRequest.getItems());
-        PromotionsResponse priceAfterPromotions = getPriceAfterPromotions(checkoutRequest, priceMap);
+        PromotionsResponse totalAfterPromotions = getTotalAfterPromotions(checkoutRequest.getItems(), priceMap);
 
+        int totalBeforePromotion = getTotalBeforePromotion(checkoutRequest.getItems(), priceMap);
 
-        int priceBeforePromotion = getPriceBeforePromotion(checkoutRequest, priceMap);
-
-        return calculateTotals(priceAfterPromotions, priceBeforePromotion);
+        return buildResponse(totalAfterPromotions, totalBeforePromotion);
     }
 
-    private int getPriceBeforePromotion(CheckoutRequest checkoutRequest, Map<String, Integer> priceMap) {
-        return checkoutRequest.getItems().stream().mapToInt(item -> item.getQuantity() * priceMap.get(item.getId())).sum();
+    /**
+     * @param items    in the basket
+     * @param priceMap loaded from sku service
+     * @return total amount of the basket using full prices
+     */
+    private int getTotalBeforePromotion(List<Item> items, Map<String, Integer> priceMap) {
+        return items.stream()
+                .mapToInt(item -> item.getQuantity() * priceMap.get(item.getId()))
+                .sum();
     }
 
-    private CheckoutResponse calculateTotals(PromotionsResponse priceAfterPromotions, int priceBeforePromotion) {
+    private CheckoutResponse buildResponse(PromotionsResponse priceAfterPromotions, int totalBeforePromotion) {
 
         int totalAfterPromotion = priceAfterPromotions.getItems()
                 .stream()
                 .mapToInt(PromotionAppliedSku::getTotalPrice)
                 .sum();
 
-        int savings = priceBeforePromotion - totalAfterPromotion;
+        int savings = totalBeforePromotion - totalAfterPromotion;
 
-        return new CheckoutResponse(priceBeforePromotion, savings, totalAfterPromotion);
+        return new CheckoutResponse(totalBeforePromotion, savings, totalAfterPromotion);
     }
 
-    private PromotionsResponse getPriceAfterPromotions(CheckoutRequest checkoutRequest, Map<String, Integer> priceMap) {
-        List<ItemWithPrice> itemsWithPrices = checkoutRequest.getItems().stream().map(item ->
-                new ItemWithPrice(item.getId(), item.getQuantity(),
-                        priceMap.get(item.getId()))).collect(Collectors.toList());
+    private PromotionsResponse getTotalAfterPromotions(List<Item> items, Map<String, Integer> priceMap) {
+        List<ItemWithPrice> itemsWithPrices = items.stream()
+                .map(item -> ItemWithPrice.builder()
+                        .id(item.getId())
+                        .price(priceMap.get(item.getId()))
+                        .quantity(item.getQuantity())
+                        .build()
+                ).collect(Collectors.toList());
 
         return promotionsApi.calculatePromotions(itemsWithPrices);
     }
 
     private Map<String, Integer> getPriceMap(List<Item> items) {
-        List<String> ids = items.stream().map(Item::getId).collect(Collectors.toList());
-        return skuProvider.getSkus(ids).stream().collect(Collectors.toMap(Sku::getId, Sku::getPrice));
+        List<String> itemIds = items.stream()
+                .map(Item::getId)
+                .collect(Collectors.toList());
+
+        return skuProvider.getSkus(itemIds).stream()
+                .collect(Collectors.toMap(Sku::getId, Sku::getPrice));
     }
 }
