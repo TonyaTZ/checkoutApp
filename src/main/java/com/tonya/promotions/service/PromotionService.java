@@ -1,6 +1,5 @@
 package com.tonya.promotions.service;
 
-import com.tonya.checkout.model.Item;
 import com.tonya.promotions.api.InternalPromotionsApi;
 import com.tonya.promotions.api.ItemWithPrice;
 import com.tonya.promotions.api.PromotionAppliedSku;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @Service
 public class PromotionService implements InternalPromotionsApi {
@@ -27,7 +24,6 @@ public class PromotionService implements InternalPromotionsApi {
 
     @Override
     public PromotionsResponse calculatePromotions(List<ItemWithPrice> items) {
-        //todo
         Map<String, Promotion> skusPromotionMap = promotionRepository.getPromotions(
                 items.stream()
                         .map(ItemWithPrice::getId)
@@ -44,7 +40,6 @@ public class PromotionService implements InternalPromotionsApi {
                 skusList.stream()
                         .map(skuWithPromotion -> PromotionCalculator.processPromotion(skuWithPromotion, skusList))
                         .collect(Collectors.toList());
-
 
         return PromotionsResponse.builder()
                 .items(promotionAppliedSkus)
