@@ -1,11 +1,13 @@
 package com.tonya.checkout.model;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
-@Data
+@AllArgsConstructor
+@Getter
 public class Item {
 
     @NotBlank

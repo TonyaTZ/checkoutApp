@@ -153,18 +153,10 @@ public class CheckoutITest {
     }
 
     private CheckoutRequest getCheckoutRequest() {
-        List<Item> items = quantityMap.entrySet()
-                .stream()
-                .map(entry -> {
-                            Item item = new Item();
-                            item.setId(entry.getKey());
-                            item.setQuantity(entry.getValue());
-                            return item;
-                        }
-                ).collect(Collectors.toList());
+        List<Item> items = quantityMap.entrySet().stream()
+                .map(entry -> new Item(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
 
-        CheckoutRequest checkoutRequest = new CheckoutRequest();
-        checkoutRequest.setItems(items);
-        return checkoutRequest;
+        return new CheckoutRequest(items);
     }
 }

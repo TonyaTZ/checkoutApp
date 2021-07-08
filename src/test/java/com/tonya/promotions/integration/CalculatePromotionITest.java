@@ -6,7 +6,6 @@ import com.tonya.promotions.api.PromotionsResponse;
 import com.tonya.promotions.model.MultiPricedPromotion;
 import com.tonya.promotions.repository.PromotionRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -46,6 +45,10 @@ public class CalculatePromotionITest {
     }
 
     private ItemWithPrice getItem(int quantity, int price) {
-        return new ItemWithPrice(UUID.randomUUID().toString(), quantity, price);
+        return ItemWithPrice.builder()
+                .id(UUID.randomUUID().toString())
+                .quantity(quantity)
+                .price(price)
+                .build();
     }
 }
