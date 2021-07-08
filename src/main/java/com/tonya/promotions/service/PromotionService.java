@@ -37,7 +37,7 @@ public class PromotionService implements InternalPromotionsApi {
         List<SkuWithPromotion> skusList = items.stream()
                 .map(item -> new SkuWithPromotion(item.getId(),
                         item.getQuantity(), item.getPrice(),
-                        skusPromotionMap.get(item.getId()), false))
+                        skusPromotionMap.get(item.getId())))
                 .collect(Collectors.toList());
 
         List<PromotionAppliedSku> promotionAppliedSkus =

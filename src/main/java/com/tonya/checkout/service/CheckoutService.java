@@ -26,6 +26,7 @@ public class CheckoutService {
      * @return response containing subtotal and total to be paid by client.
      */
     public CheckoutResponse checkout(CheckoutRequest checkoutRequest) {
+        //todo request to contain only one item of each id.
         //todo
         List<Sku> skus = getSkus(checkoutRequest.getItems());
         // #7 load promotions

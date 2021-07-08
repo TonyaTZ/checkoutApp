@@ -1,16 +1,18 @@
 package com.tonya.promotions.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 public class SkuWithPromotion {
-    private String id;
-    private int quantity;
-    private int usualPrice;
-    private Promotion promotion;
+    private final String id;
+    private final int quantity;
+    private final int usualPrice;
+    private final Promotion promotion;
     @Setter
     private boolean isPromotionApplied;
+    @Setter
+    private int priceAfterPromotion;
 }
