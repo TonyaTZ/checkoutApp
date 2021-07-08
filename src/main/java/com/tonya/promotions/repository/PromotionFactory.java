@@ -7,7 +7,8 @@ public class PromotionFactory {
     public static Promotion getPromotion(PromotionType promotionType, int price, int requiredAmount) {
         switch (promotionType) {
             case MealDeal:
-                return new MealDealPromotion(price);
+                //todo #20 meal deal table
+                return new MealDealPromotion(price, null);
             case GetOneFree:
                 return new GetOneFreePromotion(requiredAmount);
             case MultiPriced:
