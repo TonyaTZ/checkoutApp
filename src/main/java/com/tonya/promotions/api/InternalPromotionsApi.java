@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface InternalPromotionsApi {
 
-    PromotionsResponse calculatePromotions(List<Item> items);
+    PromotionsResponse calculatePromotions(List<ItemWithPrice> items);
 }

@@ -2,14 +2,19 @@ package com.tonya.promotions.service;
 
 import com.tonya.checkout.model.Item;
 import com.tonya.promotions.api.InternalPromotionsApi;
+import com.tonya.promotions.api.ItemWithPrice;
 import com.tonya.promotions.api.PromotionAppliedSku;
 import com.tonya.promotions.api.PromotionsResponse;
+import com.tonya.promotions.model.Promotion;
 import com.tonya.promotions.model.SkuWithPromotion;
 import com.tonya.promotions.repository.PromotionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Service
 public class PromotionService implements InternalPromotionsApi {
@@ -21,16 +26,28 @@ public class PromotionService implements InternalPromotionsApi {
     }
 
     @Override
-    public PromotionsResponse calculatePromotions(List<Item> items) {
+    public PromotionsResponse calculatePromotions(List<ItemWithPrice> items) {
         //todo
-        List<SkuWithPromotion> skusWithPromotions = promotionRepository.getPromotions(
+        Map<String, Promotion> skusPromotionMap = promotionRepository.getPromotions(
                 items.stream()
-                        .map(Item::getId)
+                        .map(ItemWithPrice::getId)
                         .collect(Collectors.toList())
         );
-        // #8-11 apply promotions;
-        return PromotionsResponse.builder().items(items.stream()
-                .map(i -> PromotionAppliedSku.builder().build()).collect(Collectors.toList()))
+
+        List<SkuWithPromotion> skusList = items.stream()
+                .map(item -> new SkuWithPromotion(item.getId(),
+                        item.getQuantity(), item.getPrice(),
+                        skusPromotionMap.get(item.getId()), false))
+                .collect(Collectors.toList());
+
+        List<PromotionAppliedSku> promotionAppliedSkus =
+                skusList.stream()
+                        .map(skuWithPromotion -> PromotionCalculator.processPromotion(skuWithPromotion, skusList))
+                        .collect(Collectors.toList());
+
+
+        return PromotionsResponse.builder()
+                .items(promotionAppliedSkus)
                 .build();
     }
 }

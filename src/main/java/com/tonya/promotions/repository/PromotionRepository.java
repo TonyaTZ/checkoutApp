@@ -16,20 +16,15 @@ import static java.util.stream.Collectors.toMap;
 @Service
 public class PromotionRepository {
 
-    public List<SkuWithPromotion> getPromotions(List<String> skuIds) {
-        // TODO
+    public Map<String, Promotion> getPromotions(List<String> skuIds) {
         // select s.sku_id, p.type, p.price, p.requiredAmount
         // from sku_promotion s
         // left join promotion p on(p.id = s.promotion_id)
         // where s.id in(${skuIds});
 
-
-        return skuIds.stream().map(id -> {
-            //if(db contains item for this id -> PromotionFactory.getPromotion(getRandomPromotionType(), getRandomPrice(), getRandomNumber()))
-            // else null
-
-            return new SkuWithPromotion(id, PromotionFactory.getPromotion(getRandomPromotionType(), getRandomPrice(), getRandomNumber()), false);
-        }).collect(Collectors.toList());
+        // TODO Build based on db response
+        return skuIds.stream().collect(toMap(Function.identity(),
+                id -> PromotionFactory.getPromotion(getRandomPromotionType(), getRandomPrice(), getRandomNumber())));
     }
 
     private PromotionType getRandomPromotionType() {
