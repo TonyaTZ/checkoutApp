@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <!-- This change set defines the initial table definition for the appoint-service  -->
+
+
+    <changeSet id="202107080800-1" author="Tonya Zadorozhna">
+        <sql dbms="mysql" splitStatements="true" stripComments="true">
+            <![CDATA[
+                CREATE TABLE `promotion` (
+                    `id`    int(30)      NOT NULL AUTO_INCREMENT,
+                    `type`  varchar(50) NOT NULL,
+                    `price` int(20) NOT NULL
+                    `requiredAmount`  int(20),
+                    PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+            ]]>
+        </sql>
+    </changeSet>
+
+
+    <changeSet id="202107080800-1" author="Tonya Zadorozhna">
+        <sql dbms="mysql" splitStatements="true" stripComments="true">
+            <![CDATA[
+                CREATE TABLE `sku_promotion` (
+                    `id`    int(30)      NOT NULL AUTO_INCREMENT,
+                    `sku_id`  varchar(32) NOT NULL,
+                    `promotion_id` int(30) NOT NULL,
+                    PRIMARY KEY (`id`),
+                    CONSTRAINT sku_to_promotion FOREIGN KEY
+                        (promotion_id) REFERENCES promotion (id)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+            ]]>
+        </sql>
+    </changeSet>
+</databaseChangeLog>

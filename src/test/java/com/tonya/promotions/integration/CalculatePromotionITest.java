@@ -2,7 +2,7 @@ package com.tonya.promotions.integration;
 
 import com.tonya.checkout.model.Item;
 import com.tonya.promotions.api.InternalPromotionsApi;
-import com.tonya.promotions.model.PromotionsResponse;
+import com.tonya.promotions.api.PromotionsResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
